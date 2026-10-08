@@ -1,0 +1,38 @@
+# Personal data: never commit
+/config/*
+!/config/*.example.md
+!/config/scoring_rubric.md
+/profile/*
+!/profile/master_profile.example.md
+/jobs.db*
+*.db
+*.db-journal
+/inbox/
+/output/
+/logs/
+/cvs/
+/cover_letters/
+/_to_delete/
+*.docx
+*.pdf
+*.xlsx
+*.bak
+.env*
+*.log
+
+# Python and tools
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+.vscode/
+.idea/
+.claude/
+
+# System files and keys
+.DS_Store
+Thumbs.db
+*.pem
+id_ed25519*
+/backups/

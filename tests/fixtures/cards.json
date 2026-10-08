@@ -1,0 +1,6 @@
+{
+ "cv_library": {"id": "90000201", "url": "https://www.cv-library.co.uk/job/90000201", "title": "Product Marketing Manager", "company": "Acme Ltd", "location": "Leeds (5 miles away)", "salary": "£40,000 - £48,000 per annum", "posted": "10/01/2026", "easyApply": true},
+ "indeed": {"id": "90000401", "title": "Marketing Manager", "company": "Acme Cloud", "location": "Remote in Manchester", "salary": "£45,000 a year", "posted": "3 days ago", "remote": "remote"},
+ "reed": {"id": "90000501", "url": "https://www.reed.co.uk/jobs/pmm/90000501", "title": "PMM", "company": "Acme", "location": "London", "salary": "£50,000 - £60,000 per annum", "posted": "12 January", "remote": "hybrid"},
+ "linkedin": ["90000601", "Senior PMM", "Example GmbH", "Berlin, Germany", "60.000 € pro Jahr", "2 days ago"]
+}

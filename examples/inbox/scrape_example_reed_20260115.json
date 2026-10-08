@@ -1,0 +1,6 @@
+{"source": "reed", "cards": [
+ {"id": "90000001", "url": "https://www.reed.co.uk/jobs/head-of-product-marketing/90000001", "title": "Head of Product Marketing", "company": "Acme Analytics", "location": "London", "salary": "£65,000 - £75,000 per annum", "posted": "12 January", "remote": "hybrid"},
+ {"id": "90000002", "url": "https://www.reed.co.uk/jobs/product-marketing-manager/90000002", "title": "Product Marketing Manager", "company": "Example Fintech Ltd", "location": "Birmingham", "salary": "£50,000 per annum", "posted": "13 January", "remote": "hybrid"},
+ {"id": "90000003", "url": "https://www.reed.co.uk/jobs/marketing-intern/90000003", "title": "Marketing Intern", "company": "Acme Analytics", "location": "London", "salary": "£22,000 per annum", "posted": "14 January"},
+ {"id": "90000004", "url": "https://www.reed.co.uk/jobs/senior-pmm/90000004", "title": "Senior Product Marketing Manager", "company": "Remote First Co", "location": "Remote", "salary": "£25,000 per annum", "posted": "14 January", "remote": "remote"}
+]}

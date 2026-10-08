@@ -1,0 +1,9 @@
+# Python packages used by the scripts (Python 3.10 or later)
+pyyaml>=6.0,<7
+python-docx>=1.1,<2
+openpyxl>=3.1,<4
+# Tests (optional)
+pytest>=7.0,<9
+# System tools, installed separately:
+#   LibreOffice (soffice)  PDF export and page counts
+#   poppler-utils          pdftotext and pdfinfo, used by the CV checks
