@@ -1,5 +1,10 @@
 # JobAgent
 
+> **No coding needed.** JobAgent runs inside Claude Cowork, in the Claude desktop app. You talk to
+> Claude in plain English ("set me up", "run the job pipeline", "apply to roles 12 and 15") and it
+> does the technical work, including the setup. You never write or run code yourself and never open a
+> terminal; all you need is a Claude subscription and the Claude in Chrome extension.
+
 A semi-autonomous job-application pipeline run by an AI assistant in Claude Cowork. On request it
 collects fresh vacancies from job boards, applies hard filters (salary, location, freshness),
 reads every advert in full, scores each role against your master profile, writes a tailored CV
