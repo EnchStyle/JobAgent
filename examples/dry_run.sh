@@ -30,7 +30,7 @@ echo "Data folder: $DATA (sample settings only)"
 field() { python3 -c "import sys,json; d=json.load(sys.stdin); print(', '.join(f'{k}: {d.get(k)}' for k in sys.argv[1:]))" "$@"; }
 
 echo "== 1. create the tracker"
-python3 lib/jobdb.py | head -1
+python3 lib/jobdb.py | sed -n 1p
 
 echo "== 2. ingest the sample cards (expect 6 parsed, 4 kept, 2 rejected)"
 cp examples/inbox/*.json "$DATA/inbox/"

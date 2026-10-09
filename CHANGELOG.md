@@ -1,8 +1,7 @@
 # Changelog
 
 ## Unreleased
-- Documentation: docs/FILE_STRUCTURE.md (annotated tree of every file), a folder tree and a "Results from
-  real use" section in the README.
+- Documentation: docs/FILE_STRUCTURE.md (annotated tree of every file) and a folder tree in the README.
 - AGENTS.md rule 2 now matches job-apply "Scripted help": page scripts may attach the approved file, set a
   configured answer or open a hidden control; no CAPTCHA or bot-detection bypass, no honeypot fields, no forcing
   past validation.

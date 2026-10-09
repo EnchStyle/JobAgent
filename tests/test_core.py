@@ -19,8 +19,8 @@ CFG = {
     "markets": {
         "uk": {"label": "UK", "currency": "GBP", "salary_floor": 30000, "floor_period": "annual",
                "location_hints": ["united kingdom", "england"], "unlisted_onsite": "review"},
-        "ie": {"label": "Ireland", "currency": "EUR", "salary_floor": 2500, "floor_period": "month",
-               "default_salary_period": "month", "location_hints": ["dubl", "ireland", "cork"],
+        "ie": {"label": "Ireland", "currency": "EUR", "salary_floor": 40000, "floor_period": "annual",
+               "location_hints": ["dubl", "ireland", "cork"],
                "generic_location_terms": ["ireland"], "unlisted_onsite": "reject"},
     },
     "location_allow": [
@@ -77,16 +77,16 @@ def test_place_hints_match_word_starts():
     assert mk.hint_match("re:\\buk\\b", "leeds, uk")
 
 
-def test_monthly_floor_in_second_market():
+def test_monthly_pay_against_an_annual_floor():
     ie = dict(source="linkedin", market="ie", location="Dublin", salary_currency="EUR", salary_period="month")
-    assert filters.classify(job(salary_min=2000, salary_max=3000, **ie), CFG)["keep"]
-    assert not filters.classify(job(salary_min=1500, salary_max=2000, **ie), CFG)["keep"]
+    assert filters.classify(job(salary_min=3000, salary_max=3500, **ie), CFG)["keep"]       # 42,000 a year
+    assert not filters.classify(job(salary_min=2500, salary_max=3000, **ie), CFG)["keep"]   # 36,000 a year
 
 
 def test_location_rules():
     assert filters.classify(job(location="Birmingham"), CFG)["location_status"] == "review"
     r = filters.classify(job(source="linkedin", market="ie", location="Galway", salary_currency="EUR",
-                             salary_period="month", salary_max=4000), CFG)
+                             salary_period="annual", salary_max=55000), CFG)
     assert not r["keep"] and r["reason"] == "location:ie_other_city_onsite"
     r = filters.classify(job(location="Berlin, Germany", work_mode="remote"), CFG)
     assert r["keep"] and "verify_right_to_work" in r["flags"]
@@ -104,7 +104,7 @@ def test_salary_parsers():
     assert (s["salary_min"], s["salary_currency"], s["salary_period"]) == (60000, "EUR", "annual")
     s = norm.parse_salary_any("$150,000/yr")
     assert (s["salary_min"], s["salary_currency"]) == (150000, "USD")
-    assert norm.parse_salary_any("€4,000/month")["salary_period"] == "month"
+    assert norm.parse_salary_any("€3,500/month")["salary_period"] == "month"
     assert norm.parse_salary_any("Competitive") == {}
 
 
@@ -136,8 +136,8 @@ def test_salary_parser_ignores_numbers_outside_a_range():
     assert norm.parse_salary_any("60.000 € pro Jahr, 40 Std./Woche")["salary_min"] == 60000
     s = norm.parse_salary_any("$120k - 140k")
     assert (s["salary_min"], s["salary_max"]) == (120000, 140000)
-    s = norm.parse_salary_any("4 000 – 5 500 EUR per month")
-    assert (s["salary_min"], s["salary_max"], s["salary_period"]) == (4000, 5500, "month")
+    s = norm.parse_salary_any("45 000 – 55 000 EUR per year")
+    assert (s["salary_min"], s["salary_max"], s["salary_period"]) == (45000, 55000, "annual")
 
 
 def test_every_bundled_normaliser():
@@ -403,24 +403,24 @@ def test_closing_dates_and_closed_gate():
     assert filters.closed_gate({"closing_date": None}, today)
 
 def test_range_rule_bottom_requires_lowest_pay():
-    cfg = {**CFG, "markets": {**CFG["markets"], "ie": {**CFG["markets"]["ie"], "salary_floor": 4000,
+    cfg = {**CFG, "markets": {**CFG["markets"], "ie": {**CFG["markets"]["ie"], "salary_floor": 50000,
                                                        "salary_range_rule": "bottom"}}}
-    ie = dict(source="linkedin", market="ie", location="Dublin", salary_currency="EUR", salary_period="month")
-    assert not filters.classify(job(salary_min=3000, salary_max=4000, **ie), cfg)["keep"]
-    assert not filters.classify(job(salary_min=3500, salary_max=4100, **ie), cfg)["keep"]
-    assert filters.classify(job(salary_min=4000, salary_max=5000, **ie), cfg)["keep"]
-    assert filters.classify(job(salary_min=4200, salary_max=4200, **ie), cfg)["keep"]
-    assert filters.classify(job(salary_min=None, salary_max=4500, **ie), cfg)["keep"]
+    ie = dict(source="linkedin", market="ie", location="Dublin", salary_currency="EUR", salary_period="annual")
+    assert not filters.classify(job(salary_min=40000, salary_max=50000, **ie), cfg)["keep"]
+    assert not filters.classify(job(salary_min=45000, salary_max=51000, **ie), cfg)["keep"]
+    assert filters.classify(job(salary_min=50000, salary_max=60000, **ie), cfg)["keep"]
+    assert filters.classify(job(salary_min=52000, salary_max=52000, **ie), cfg)["keep"]
+    assert filters.classify(job(salary_min=None, salary_max=55000, **ie), cfg)["keep"]
     # the default rule still passes a range whose top reaches the floor
-    top_cfg = {**CFG, "markets": {**CFG["markets"], "ie": {**CFG["markets"]["ie"], "salary_floor": 4000}}}
-    assert filters.classify(job(salary_min=3000, salary_max=4000, **ie), top_cfg)["keep"]
+    top_cfg = {**CFG, "markets": {**CFG["markets"], "ie": {**CFG["markets"]["ie"], "salary_floor": 50000}}}
+    assert filters.classify(job(salary_min=40000, salary_max=50000, **ie), top_cfg)["keep"]
 
 
 def test_market_board_factor_overrides_plan_factor():
     import search_plan
-    fc = {**CFG, "markets": {**CFG["markets"], "ie": {**CFG["markets"]["ie"], "salary_floor": 4000,
+    fc = {**CFG, "markets": {**CFG["markets"], "ie": {**CFG["markets"]["ie"], "salary_floor": 50000,
                                                       "board_salary_factor": 1.0}}}
-    assert search_plan.board_floor("ie", 0.75, fc) == "4000"
+    assert search_plan.board_floor("ie", 0.75, fc) == "50000"
     assert search_plan.board_floor("uk", 0.75, fc) == "22000"
 
 
@@ -451,8 +451,8 @@ def test_all_flag_ignores_board_caps():
 def test_salary_period_aliases_are_understood():
     assert markets.period_key("monthly") == "month" and markets.period_key("daily") == "day"
     assert markets.period_key("per annum") == "annual" and markets.period_key(None) == "annual"
-    cfg = {"default_market": "ie", "markets": {"ie": {"currency": "EUR", "salary_floor": 4000, "floor_period": "month",
-           "salary_range_rule": "bottom", "default_salary_period": "month"}}}
+    cfg = {"default_market": "ie", "markets": {"ie": {"currency": "EUR", "salary_floor": 50000, "floor_period": "annual",
+           "salary_range_rule": "bottom"}}}
     job = {"market": "ie", "salary_min": 5000, "salary_max": 6000, "salary_period": "monthly", "salary_currency": "EUR"}
     assert filters.salary_gate(job, cfg)[0] is True
 

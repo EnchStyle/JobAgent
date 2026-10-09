@@ -314,7 +314,7 @@ def check_gaps(doc):
     timeline - dropping a role, especially the current one, is what creates the
     unexplained gaps recruiters treat as a red flag. Heuristic: reads dates from
     the Work Experience section only and skips anything it cannot parse. Handles
-    English date formats."""
+    English month names; an end date without a year counts as ongoing."""
     import datetime
     print("\n== EMPLOYMENT TIMELINE (no dropped current role / no unexplained gaps) ==")
     today = datetime.date.today()
@@ -348,11 +348,12 @@ def check_gaps(doc):
 
     def parse_point(s, is_end):
         s = s.strip().lower()
-        if re.search(r"present|current|\bnow\b|dabar|ongoing|to date|iki dabar", s):
+        if re.search(r"present|current|\bnow\b|ongoing|to date", s):
             return TODAY
         ym = re.search(r"(19|20)\d\d", s)
         if not ym:
-            return None
+            # An end with no year is an ongoing role, whatever word the CV uses for "Present".
+            return TODAY if is_end else None
         year = int(ym.group(0))
         month = None
         for n, v in MONTHS.items():

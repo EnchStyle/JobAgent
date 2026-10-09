@@ -121,38 +121,6 @@ Created on first use and never committed: your `config/*.md` files, `profile/mas
 `jobs.db`, `inbox/`, `output/`, `logs/` and `backups/`. The full annotated tree is in
 docs/FILE_STRUCTURE.md.
 
-## Results from real use
-
-Figures from the author's own tracker for UK roles, 10 July to 8 October 2026 (about 13 weeks).
-One person's search, not a benchmark; your numbers depend on your field, filters and boards.
-
-| Measure | Count | Notes |
-|---|---:|---:|
-| Roles that passed the hard filters and entered the tracker | 10,483 | 100% |
-| Adverts read in full and scored | 8,585 | 81.9% of tracked roles |
-| Scored 60 or more (apply band) | 284 | 3.3% of scored adverts |
-| Scored 50 to 59 (review band, the user decides) | 495 | 5.8% of scored adverts |
-| Scored under 50 (skipped) | 7,806 | 90.9% of scored adverts |
-| Tailored CVs written | 481 | 216 apply band, 264 review band, 1 other |
-| Cover letters written | 348 | |
-| Applications sent, each approved by the user | 258 | 161 apply band, 93 review band, 4 added by hand; about 20 a week |
-| Interviews | 8 | about 1 in 32 applications |
-| Offers | 3 | from the 8 interviews |
-
-What this means in practice: roughly one advert in 33 that was read in full led to an
-application, and the assistant did the reading. The user's time went on approving
-submissions, finishing applications behind an account wall, reviewing the 50 to 59 band, and
-the interviews themselves.
-
-How the figures were produced: counts taken from the tracker (`jobs.db`) with SQL, then
-checked against a second count in Python and against the totals from `pipeline_status.py`;
-all three agreed. "Read in full and scored" counts rows with a stored score; "applications"
-counts rows with an application date in the period. Not every role in the apply band gets a
-CV: some are dropped after the read for location, sales or a closed advert, and the review band
-adds the roles the user approves. Roles dropped at ingest by the hard filters (salary, location,
-freshness, titles) never enter the tracker and are not counted. Interviews and offers are as
-reported by the author; the tracker does not record them.
-
 ## Important limitations
 
 - Job boards have terms of use, and some restrict automated access. You are responsible for how
@@ -167,9 +135,13 @@ reported by the author; the tracker does not record them.
 
 ## About this project
 
-This project was designed and built with Claude by a non-programmer, as a working tool for a
-real job search, and then generalised for public use. Expect pragmatic code rather than a
-polished library. See CONTRIBUTING.md for how to help and CHANGELOG.md for what changed.
+JobAgent began as an experiment. Looking for a job now means reading hundreds of adverts and
+rewriting the same CV again and again, and the question was how much of that routine an AI
+assistant could take on while every decision stays with the person. It was inspired by
+Santiago Fernández's [career-ops](https://github.com/santifer/career-ops) and aims to make the
+same idea usable without writing code. It was designed and built with Claude, so expect
+pragmatic code rather than a polished library. See CONTRIBUTING.md for how to help and
+CHANGELOG.md for what changed.
 
 ## Licence
 

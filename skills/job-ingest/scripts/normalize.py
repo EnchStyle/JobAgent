@@ -70,7 +70,7 @@ _PERIODS = [
 
 
 def _to_number(tok):
-    """'60.000' -> 60000, '60,000' -> 60000, '4 000' -> 4000, '1,1' -> 1.1, '55.5' -> 55.5."""
+    """'60.000' -> 60000, '60,000' -> 60000, '45 000' -> 45000, '1,1' -> 1.1, '55.5' -> 55.5."""
     s = tok.strip().replace("\u00a0", " ").replace(" ", "")
     if "." in s and "," in s:
         dec = "." if s.rfind(".") > s.rfind(",") else ","
@@ -90,7 +90,7 @@ def _to_number(tok):
 
 def parse_salary_any(text, default_currency=None, default_period=None):
     """Currency- and locale-aware salary parser for boards outside the UK.
-    Handles '60.000 € pro Jahr', '$150,000/yr', 'EUR 4,000 per month', 'CHF 120k'. A pound
+    Handles '60.000 € pro Jahr', '$150,000/yr', 'EUR 3,500 per month', 'CHF 120k'. A pound
     amount is passed to parse_salary_gbp, which knows UK board quirks."""
     if not text:
         return {}
@@ -102,14 +102,14 @@ def parse_salary_any(text, default_currency=None, default_period=None):
     def value(m, i):
         n = _to_number(m.group(i))
         if n is not None and m.group(i + 1):
-            n *= 1_000_000 if m.group(i + 1).lower() == "mln" else 1000
+            n *= 1000
         return n
 
     # The first amount, and a second one only when a range word or sign joins them
-    # ("55.000 - 65.000", "55k to 65k", "4 000 – 5 500"). Anything later in the text
+    # ("55.000 - 65.000", "55k to 65k", "45 000 – 55 000"). Anything later in the text
     # ("+ 10% bonus", "40 Std./Woche", "30 days holiday") is ignored.
     nums = []
-    m = re.search(num + r"(?:\s*[€$£]?\s*(?:-|\u2013|\u2014|to|bis|iki)\s*(?:[€$£]|[A-Z]{3})?\s*" + num + r")?", text)
+    m = re.search(num + r"(?:\s*[€$£]?\s*(?:-|\u2013|\u2014|to|bis)\s*(?:[€$£]|[A-Z]{3})?\s*" + num + r")?", text)
     if m:
         a = value(m, 1)
         if a is not None:
